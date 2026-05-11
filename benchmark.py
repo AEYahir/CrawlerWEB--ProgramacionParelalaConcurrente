@@ -1,16 +1,26 @@
 import time
+import os
 from sequential_crawler import crawl_sequential
 from concurrent_crawler import crawl_concurrent
+from dotenv import load_dotenv
 
-SEED = "https://books.toscrape.com"
-MAX_PAGES = 10
-NUM_THREADS = 2
+load_dotenv()
+
+
+
+SEED = os.getenv("SEED_URL", "https://books.toscrape.com")
+MAX_PAGES = int(os.getenv("MAX_PAGES", 50))
+NUM_THREADS = int(os.getenv("NUM_THREADS", 8))
 
 print("=" * 55)
 print("   BENCHMARK — CRAWLER WEB CONCURRENTE")
 print("=" * 55)
 
-print("\n[1/5] Corriendo versión SECUENCIAL...")
+print(f"\n[2/2] Corriendo versión CONCURRENTE con {NUM_THREADS} hilo(s)...")
+_, t = crawl_concurrent(SEED, max_pages=MAX_PAGES, num_threads=NUM_THREADS)
+tiempo = t
+
+print("\n[1/5] Corriendo versión SECUENCIAL...") 
 _, t_seq = crawl_sequential(SEED, max_pages=MAX_PAGES)
 
 tiempos = {}
@@ -21,9 +31,7 @@ tiempos = {}
     tiempos[n] = t
 '''
 
-print(f"\n[2/2] Corriendo versión CONCURRENTE con {NUM_THREADS} hilo(s)...")
-_, t = crawl_concurrent(SEED, max_pages=MAX_PAGES, num_threads=NUM_THREADS)
-tiempo = t
+
 
 
 print("\n")
