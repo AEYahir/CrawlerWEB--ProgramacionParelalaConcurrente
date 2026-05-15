@@ -16,7 +16,7 @@ visited = set()
 results = []
 
 
-def fetch_page(url):
+def fetch_page(url): # Función para obtener el contenido HTML de una página dada su URL
     try:
         response = requests.get(url, timeout=5)
         response.raise_for_status()
@@ -27,7 +27,7 @@ def fetch_page(url):
         return None
 
 
-def extract_links(html, base_url):
+def extract_links(html, base_url): # Función para extraer los enlaces de una página HTML, recibe el contenido HTML y la URL base para resolver enlaces relativos
     soup = BeautifulSoup(html, "html.parser")
     links = set()
     for tag in soup.find_all("a", href=True):
@@ -37,17 +37,17 @@ def extract_links(html, base_url):
     return links
 
 
-def extract_title(html):
+def extract_title(html): # Función para extraer el título de una página HTML, recibe el contenido HTML
     soup = BeautifulSoup(html, "html.parser")
     title = soup.find("title")
     return title.text.strip() if title else "Sin título"
 
 
-def worker(task_queue, seed_url, max_pages):
+def worker(task_queue, seed_url, max_pages): # Función que repite cada hilo para procesar las URLs de la cola de tareas, recibe la cola de tareas, la URL semilla y el número máximo de páginas a visitar
     while True:
         url = task_queue.get()  
 
-        if url is CENTINELA:   
+        if url is CENTINELA: # Si se recibe la señal de centinela, se marca la tarea como hecha y se rompe el ciclo para terminar el hilo   
             task_queue.task_done()
             break
 

@@ -17,3 +17,6 @@ __pycache__/
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Grafica de resultados
+benchmark_results.png
